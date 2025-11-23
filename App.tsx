@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View,ScrollView, SafeAreaView, TouchableOpacity, TextInput } from 'react-native'
-import React, { use, useState } from 'react'
+import React, { useState } from 'react'
 import * as Yup from 'yup'
-
 import { Formik } from 'formik';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 
@@ -29,16 +28,16 @@ export default function App() {
     const symbolChars = '!@#$%^&*()_+~`|}{[]:;?><,./-=';
 
     if (lowercase){
-      CharaterList += lowercase
+      CharaterList += lowercaseChars
     }
     if (uppercase){
-      CharaterList += uppercase
+      CharaterList += uppercaseChars
     }
     if (numbers){
-      CharaterList += numbers
+      CharaterList += numberChars
     }
     if (symbols){
-      CharaterList += symbols
+      CharaterList += symbolChars
     }
 
     const passwordResult= createpassword(CharaterList, PasswprdLength);
@@ -73,10 +72,12 @@ export default function App() {
         <View style={styles.formContainer}>
           <Text style={styles.title}>Password Generator</Text>
           <Text style={styles.description}>Create a strong and secure password to protect your accounts and data.</Text>
-               <Formik
+       <Formik
        initialValues={{PasswprdLength: ''}}
        validationSchema={passwordSchema}
        onSubmit={values => {
+        console.log(values);
+        
           genratepasswordString(Number(values.PasswprdLength));
        }}
      >
@@ -103,7 +104,7 @@ export default function App() {
            <TextInput 
             style={styles.inputStyle}
             value={values.PasswprdLength}
-            onChangeText={handleChange('passwprdLength')}
+            onChangeText={handleChange('PasswprdLength')}
             placeholder="Ex. 8"
             keyboardType= 'numeric'
             />
@@ -123,7 +124,7 @@ export default function App() {
           disableBuiltInState
           isChecked={uppercase}
           onPress={()=> (setUppercase(!uppercase))}
-          fillColor='#29AB87'
+          fillColor='#cc419eff'
           />
          </View>
          <View style={styles.inputWrapper}>
@@ -132,7 +133,7 @@ export default function App() {
           disableBuiltInState
           isChecked={numbers}
           onPress={()=> (setNumbers(!numbers))}
-          fillColor='#29AB87'
+          fillColor='#d1ea2dff'
           />
          </View>
          <View style={styles.inputWrapper}>
@@ -141,7 +142,7 @@ export default function App() {
           disableBuiltInState
           isChecked={symbols}
           onPress={()=> (setSymbols(!symbols))}
-          fillColor='#29AB87'
+          fillColor='#26ff0eff'
           />
          </View>
 
@@ -169,8 +170,10 @@ export default function App() {
      </Formik>
         </View>
         {ispassGenerated ? (
-          <View style={styles.generatedPassword}>
-            <Text style={styles.inputStyle}>Test</Text>
+          <View style={[styles.card, styles.cardElevated]}>
+            <Text style={styles.subTitle}>Result:</Text>
+            <Text style={styles.description}>Long Press to Copy</Text>
+            <Text selectable={true} style={styles.generatedPassword}>{Password}</Text>
           </View>
         ) : null}
 
